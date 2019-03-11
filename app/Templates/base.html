@@ -13,6 +13,17 @@
     {% include 'includes/_navbar.html' %}
     <div class="container">
         <br>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+          {% for message in messages %}
+          <div class="alert alert-success">
+            <strong>Success!</strong> {{ message }}
+          </div>
+          {% endfor %}
+
+        {% endif %}
+        {% endwith %}
         {% block body %}{% endblock %}
     </div>
 </body>

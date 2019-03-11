@@ -1,2 +1,2 @@
-from .Give import Give
+from .Transaction import Transaction
 from .User import User
