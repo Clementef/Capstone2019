@@ -3,10 +3,22 @@
 {% block body %}
 
 <div class='container'>
-  <div class='jumbotron'>
-    <h1>Capstone 2019</h1>
+  {% if not session %}
+      <div class='jumbotron'>
+        <div class="column">
+          <div class="row justify-content-center">
+            <h1>Welcome to Capstone 2019</h1>
+          </div>
+          <div class="row justify-content-center">
+            <a class="btn btn-primary" role="button" href="/login">Login</a>
+          </div>
+      </div>
+  {% endif %}
+  <div class="jumbotron">
+    <h1>The Ledger</h1>
+    {% for transaction in transactions %}
+    {% endfor %}
   </div>
 </div>
-
 
 {% endblock %}

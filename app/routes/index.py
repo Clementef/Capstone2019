@@ -3,7 +3,7 @@ from app.routes import app
 from flask import render_template, session, redirect, request
 from requests_oauth2.services import GoogleClient
 from requests_oauth2 import OAuth2BearerToken
-from .Classes import User
+from .Classes import User, Transaction
 
 google_auth = GoogleClient(
     client_id=("570439607080-1jbsss0dpsh9uf2ho0ng4vg999ioq38d"
@@ -16,6 +16,9 @@ google_auth = GoogleClient(
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
+    for transaction in Transaction.objects[:9]:
+        
+
     return render_template('index.html')
 
 @app.route('/login')
