@@ -39,10 +39,12 @@ def login():
 
     for i in User.objects:
         if i.name == session["displayName"]:
+            session["wallet"] = i.wallet
             return redirect("/")
     user.name = session["displayName"]
     user.image = session["image"]
     user.wallet = "10"
+    session["wallet"] = user.wallet
     user.save()
 
     return redirect("/")
@@ -64,3 +66,10 @@ def google_oauth2callback():
     )
     session["access_token"] = data.get("access_token")
     return redirect("/login")
+
+
+@app.route("/logout")
+def logout():
+    [session.pop(key) for key in list(session.keys()) if key != '_flashes']
+
+    return redirect("/")
