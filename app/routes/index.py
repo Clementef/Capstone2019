@@ -16,10 +16,8 @@ google_auth = GoogleClient(
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
-    for transaction in Transaction.objects[:9]:
-        
-
-    return render_template('index.html')
+    ledgerTransactions = Transaction.objects[:9]
+    return render_template('index.html', ledgerTransactions = ledgerTransactions)
 
 @app.route('/login')
 def login():

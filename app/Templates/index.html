@@ -2,8 +2,8 @@
 
 {% block body %}
 
-<div class='container'>
   {% if not session %}
+  <div class='container'>
       <div class='jumbotron'>
         <div class="column">
           <div class="row justify-content-center">
@@ -13,12 +13,21 @@
             <a class="btn btn-primary" role="button" href="/login">Login</a>
           </div>
       </div>
-  {% endif %}
-  <div class="jumbotron">
-    <h1>The Ledger</h1>
-    {% for transaction in transactions %}
-    {% endfor %}
+    </div>
   </div>
-</div>
+  {% endif %}
+  <div class='container'>
+    <div class="jumbotron">
+      <h1>The Ledger</h1>
+      <ul class="list-group">
+      {% for transaction in ledgerTransactions %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{transaction.giver}} gave {{transaction.recipient}}
+          <span class="badge badge-primary badge-pill">{{transaction.amount}}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    </div>
+  </div>
 
 {% endblock %}
