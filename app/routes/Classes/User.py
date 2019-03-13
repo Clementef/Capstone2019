@@ -5,4 +5,5 @@ class User(Document):
     email = StringField()
     student_id = StringField()
     wallet = StringField()
+    reputation = StringField()
     image = StringField()

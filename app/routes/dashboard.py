@@ -57,13 +57,15 @@ def dashboard():
             newTransaction.save()
 
 
-            # transfer currency between users
+            # transfer currency between users and give reputation
             for recipient in User.objects:
                 if recipient.name == newTransaction.recipient:
                     recipient.update(wallet = str(int(recipient.wallet) + int(newTransaction.amount)))
+                    recipient.update(reputation = str(int(recipient.reputation) + int(newTransaction.amount)))
             for giver in User.objects:
                 if giver.name == newTransaction.giver:
                     giver.update(wallet = str(int(giver.wallet) - int(newTransaction.amount)))
+                    giver.update(reputation = str(int(giver.reputation) + int(newTransaction.amount)))
 
             flash("You successfully sent " + form.amount.data + " currency to " + form.recipient.data)
             return redirect("/dashboard")
@@ -72,4 +74,5 @@ def dashboard():
     for user in User.objects:
         if user.name == session["displayName"]:
             session["wallet"] = user.wallet
-    return render_template('dashboard.html', name=session["displayName"], image=session["image"], wallet=session["wallet"], form=form)
+            session["reputation"] = user.reputation
+    return render_template('dashboard.html', name=session["displayName"], image=session["image"], wallet=session["wallet"], reputation = session["reputation"], form=form)

@@ -16,7 +16,8 @@ google_auth = GoogleClient(
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
-    ledgerTransactions = Transaction.objects[:9]
+    transactionList = list(Transaction.objects[:9])
+    ledgerTransactions = transactionList[::-1]
     return render_template('index.html', ledgerTransactions = ledgerTransactions)
 
 @app.route('/login')
@@ -41,11 +42,14 @@ def login():
     for i in User.objects:
         if i.name == session["displayName"]:
             session["wallet"] = i.wallet
+            session["reputation"] = i.reputation
             return redirect("/")
     user.name = session["displayName"]
     user.image = session["image"]
     user.wallet = "10"
+    user.reputation = "0"
     session["wallet"] = user.wallet
+    session["reputation"] = user.reputation
     user.save()
 
     return redirect("/")
