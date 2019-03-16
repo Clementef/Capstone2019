@@ -4,16 +4,27 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class=" col-md-4">
+    <div class="col-md-12 text-center">
+      <h1>Dashboard</h1>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12">
       <div class="jumbotron text-center">
-        <img class="rounded mx-auto d-block" src={{image}} />
-        
-        <h3>{{name}}</h3>
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn  btn-static">
+            <img class="rounded mx-auto d-block" height="40px" width="40px" src={{image}} />
+          </button>
+          <button type="button" class="btn btn-static">
+            <h4>{{name}}</h4>
+          </button>
+        </div>
         <h4>Wallet: {{wallet}}</h4>
         <h4>Reputation: {{reputation}}</h4>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-lg-6 col-md-12 col-sm-12">
       <div class="jumbotron">
         <h1>Give</h1>
         <form method=post>
@@ -30,6 +41,5 @@
     </div>
   </div>
 </div>
-
 
 {% endblock %}

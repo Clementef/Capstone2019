@@ -4,7 +4,8 @@ from .Forms import GiveForm
 from .Classes import Transaction, User
 import requests
 
-@app.route('/dashboard', methods = ['GET', 'POST'])
+
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     form = GiveForm(request.form)
 
@@ -14,7 +15,7 @@ def dashboard():
         for giver in User.objects:
             if giver.name == session["displayName"]:
 
-                #check that the amount is an integer
+                # check that the amount is an integer
                 try:
                     data = int(form.amount.data)
                     if data >= 0:
@@ -30,44 +31,57 @@ def dashboard():
                     flash("Please fill all fields before submitting")
                     return redirect("/dashboard")
 
-
                 # check that giver isn't giving money to themselves
                 if (giver.name != form.recipient.data):
                     validTransaction = True
                 else:
-                    flash("You can't give it to yourself, " + giver.name[0:giver.name.find(" ")])
+                    flash("You can't give it to yourself, " +
+                          giver.name[0:giver.name.find(" ")])
                     return redirect("/dashboard")
 
                 # check if giver has enough money
                 if (int(giver.wallet) >= int(form.amount.data)):
                     validTransaction = True
                 else:
-                    flash("You can't send " + form.amount.data + " when you only have " + giver.wallet)
+                    flash("You can't send " + form.amount.data +
+                          " when you only have " + giver.wallet)
                     return redirect("/dashboard")
-
-
 
         # if valid
         if validTransaction:
+            # get giver data
+            for user in User.objects:
+                if user.name == session["displayName"]:
+                    giveUser = user
+
+            # get recipient data
+            for user in User.objects:
+                if user.name == form.recipient.data:
+                    recipientUser = user
+
             # create the transaction
             newTransaction = Transaction()
-            newTransaction.giver = session['displayName']
-            newTransaction.recipient = form.recipient.data
+            newTransaction.giver = giveUser
+            newTransaction.recipient = recipientUser
             newTransaction.amount = form.amount.data
             newTransaction.save()
 
-
             # transfer currency between users and give reputation
             for recipient in User.objects:
-                if recipient.name == newTransaction.recipient:
-                    recipient.update(wallet = str(int(recipient.wallet) + int(newTransaction.amount)))
-                    recipient.update(reputation = str(int(recipient.reputation) + int(newTransaction.amount)))
+                if recipient.name == newTransaction.recipient.name:
+                    recipient.update(wallet=str(
+                        int(recipient.wallet) + int(newTransaction.amount)))
+                    recipient.update(reputation=str(
+                        int(recipient.reputation) + int(newTransaction.amount)))
             for giver in User.objects:
-                if giver.name == newTransaction.giver:
-                    giver.update(wallet = str(int(giver.wallet) - int(newTransaction.amount)))
-                    giver.update(reputation = str(int(giver.reputation) + int(newTransaction.amount)))
+                if giver.name == newTransaction.giver.name:
+                    giver.update(wallet=str(int(giver.wallet) -
+                                            int(newTransaction.amount)))
+                    giver.update(reputation=str(
+                        int(giver.reputation) + int(newTransaction.amount)))
 
-            flash("You successfully sent " + form.amount.data + " currency to " + form.recipient.data)
+            flash("You successfully sent " + form.amount.data +
+                  " currency to " + form.recipient.data)
             return redirect("/dashboard")
 
     # Update Wallet
@@ -75,4 +89,4 @@ def dashboard():
         if user.name == session["displayName"]:
             session["wallet"] = user.wallet
             session["reputation"] = user.reputation
-    return render_template('dashboard.html', name=session["displayName"], image=session["image"], wallet=session["wallet"], reputation = session["reputation"], form=form)
+    return render_template('dashboard.html', name=session["displayName"], image=session["image"], wallet=session["wallet"], reputation=session["reputation"], form=form)

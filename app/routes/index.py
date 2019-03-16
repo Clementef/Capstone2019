@@ -14,11 +14,17 @@ google_auth = GoogleClient(
     # "https://computerinv-216303.appspot.com/oauth2callback"
 )
 
-@app.route('/', methods = ['GET', 'POST'])
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
     transactionList = list(Transaction.objects[:9])
     ledgerTransactions = transactionList[::-1]
-    return render_template('index.html', ledgerTransactions = ledgerTransactions)
+
+    userList = list(User.objects.order_by('-reputation')[:9])
+    leaderboardUsers = userList[::-1]
+
+    return render_template('index.html', ledgerTransactions=ledgerTransactions, leaderboardUsers=leaderboardUsers)
+
 
 @app.route('/login')
 def login():
@@ -26,7 +32,8 @@ def login():
         return redirect("/oauth2callback")
     with requests.Session() as s:
         s.auth = OAuth2BearerToken(session["access_token"])
-        r = s.get("https://www.googleapis.com/plus/v1/people/me?access_token={}".format(session.get("access_token")))
+        r = s.get("https://www.googleapis.com/plus/v1/people/me?access_token={}".format(
+            session.get("access_token")))
     r.raise_for_status()
     data = r.json()
 
@@ -53,6 +60,7 @@ def login():
     user.save()
 
     return redirect("/")
+
 
 @app.route("/oauth2callback")
 def google_oauth2callback():
