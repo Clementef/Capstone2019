@@ -17,13 +17,16 @@ google_auth = GoogleClient(
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    transactionList = list(Transaction.objects[:9])
-    ledgerTransactions = transactionList[::-1]
+    ledgerTransactions = list(Transaction.objects[:9])[::-1]
 
-    userList = list(User.objects.order_by('-reputation')[:9])
-    leaderboardUsers = userList[::-1]
+    totalMoney = 0
+    for transaction in list(Transaction.objects):
+        totalMoney += int(transaction.amount)
+    totalTransactions = len(list(Transaction.objects))
 
-    return render_template('index.html', ledgerTransactions=ledgerTransactions, leaderboardUsers=leaderboardUsers)
+    leaderboardUsers = list(User.objects.order_by('-reputation')[:9])
+
+    return render_template('index.html', ledgerTransactions=ledgerTransactions, leaderboardUsers=leaderboardUsers, totalMoney = str(totalMoney), totalRep = str(totalMoney*2), totalTransactions = str(totalTransactions))
 
 
 @app.route('/login')

@@ -89,4 +89,14 @@ def dashboard():
         if user.name == session["displayName"]:
             session["wallet"] = user.wallet
             session["reputation"] = user.reputation
-    return render_template('dashboard.html', name=session["displayName"], image=session["image"], wallet=session["wallet"], reputation=session["reputation"], form=form)
+
+    totalMoney = 0
+    totalTransactions = 0
+    for transaction in list(Transaction.objects):
+        if (transaction.giver.name == session["displayName"] or transaction.recipient.name == session["displayName"]):
+            totalMoney += int(transaction.amount)
+            totalTransactions += 1
+    totalRep = totalMoney * 2
+
+    return render_template('dashboard.html', name=session["displayName"], image=session["image"], wallet=session["wallet"], reputation=session["reputation"], form=form,
+                                             totalMoney = totalMoney, totalRep = totalRep, totalTransactions = totalTransactions)
