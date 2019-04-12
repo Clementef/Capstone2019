@@ -35,4 +35,6 @@ def getNames():
 class GiveForm(FlaskForm):
     amount = StringField("Amount")
     recipient = SelectField(label="To", choices=getNames())
+    reason = StringField("Reason")
+    category = SelectField(label="Category", choices = [('Helped others','Helped others'),('Did me a favor','Did me a favor'),('Did something for a teacher','Did something for a teacher'),('Class participation','Class participation'),('Community beautification','Community beautification')])
     submit = SubmitField("Submit")

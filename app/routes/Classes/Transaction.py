@@ -6,3 +6,5 @@ class Transaction(Document):
     giver = ReferenceField(User)
     recipient = ReferenceField(User)
     amount = StringField()
+    reason = StringField()
+    category = StringField()

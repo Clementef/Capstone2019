@@ -4,6 +4,7 @@ from flask import render_template, session, redirect, request
 from requests_oauth2.services import GoogleClient
 from requests_oauth2 import OAuth2BearerToken
 from .Classes import User, Transaction
+from collections import Counter
 
 google_auth = GoogleClient(
     client_id=("570439607080-1jbsss0dpsh9uf2ho0ng4vg999ioq38d"
@@ -14,11 +15,11 @@ google_auth = GoogleClient(
     # "https://computerinv-216303.appspot.com/oauth2callback"
 )
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     ledgerTransactions = list(Transaction.objects[:9])[::-1]
 
+    # get totalmoney
     totalMoney = 0
     for transaction in list(Transaction.objects):
         totalMoney += int(transaction.amount)
@@ -26,7 +27,16 @@ def index():
 
     leaderboardUsers = list(User.objects.order_by('-reputation')[:9])
 
-    return render_template('index.html', ledgerTransactions=ledgerTransactions, leaderboardUsers=leaderboardUsers, totalMoney = str(totalMoney), totalRep = str(totalMoney*2), totalTransactions = str(totalTransactions))
+    #get the categories that have been used
+    #and how many transactions of that Category
+    categoryList = Counter([transaction.category for transaction in Transaction.objects])
+    categories = [[category,categoryList[category]] for category in categoryList]
+
+
+    return render_template('index.html',
+                            ledgerTransactions=ledgerTransactions, leaderboardUsers=leaderboardUsers,
+                            totalMoney = str(totalMoney), totalRep = str(totalMoney*2), totalTransactions = str(totalTransactions),
+                            categories = categories)
 
 
 @app.route('/login')

@@ -9,6 +9,8 @@ import requests
 def dashboard():
     form = GiveForm(request.form)
 
+    print(form.reason.data, type(form.reason.data))
+    print(form.category.data, type(form.category.data))
     if request.method == 'POST' and form.validate():
         validTransaction = False
         # check transaction validity
@@ -64,6 +66,8 @@ def dashboard():
             newTransaction.giver = giveUser
             newTransaction.recipient = recipientUser
             newTransaction.amount = form.amount.data
+            newTransaction.reason = form.reason.data
+            newTransaction.category = form.category.data
             newTransaction.save()
 
             # transfer currency between users and give reputation
@@ -90,13 +94,21 @@ def dashboard():
             session["wallet"] = user.wallet
             session["reputation"] = user.reputation
 
+
+    #get total money and transactions for user
+    #get transaction History
     totalMoney = 0
     totalTransactions = 0
+
+    userTransactions = []
+
     for transaction in list(Transaction.objects):
         if (transaction.giver.name == session["displayName"] or transaction.recipient.name == session["displayName"]):
             totalMoney += int(transaction.amount)
             totalTransactions += 1
+            userTransactions.append(transaction)
     totalRep = totalMoney * 2
 
     return render_template('dashboard.html', name=session["displayName"], image=session["image"], wallet=session["wallet"], reputation=session["reputation"], form=form,
-                                             totalMoney = totalMoney, totalRep = totalRep, totalTransactions = totalTransactions)
+                                             totalMoney = totalMoney, totalRep = totalRep, totalTransactions = totalTransactions,
+                                             userTransactions = userTransactions)

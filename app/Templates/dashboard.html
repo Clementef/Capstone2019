@@ -12,6 +12,8 @@
   <div class="row">
     <div class="col-lg-6 col-md-12 col-sm-12">
       <div class="jumbotron text-center">
+        <h1>Profile</h1>
+        <hr />
         <div class="btn-group" role="group" aria-label="...">
           <button type="button" class="btn  btn-static">
             <img class="rounded mx-auto d-block" height="40px" width="40px" src={{image}} />
@@ -20,10 +22,37 @@
             <h4>{{name}}</h4>
           </button>
         </div>
-        <h4>Wallet: {{wallet}}</h4>
-        <h4>Reputation: {{reputation}}</h4>
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-static">
+            <h4><a href="#" data-toggle="tooltip" data-placement="right" title="Currency is invaluable. You get 10 for free every week to give to people.">Wallet: {{wallet}}</a></h4>
+          </button>
+          <button type="button" class="btn btn-static">
+            <h4><a href="#" data-toggle="tooltip" data-placement="right" title="Reputation = currency given + currency received">Reputation: {{reputation}}</a></h4>
+          </button>
+        </div>
       </div>
-
+      <div class="jumbotron">
+        <h1 class="text-center">Give</h1>
+        <hr />
+        <form method=post>
+          {{ form.hidden_tag() }}
+          {{ form.recipient.label }}
+          {{ form.recipient(class_="form-control") }}
+          <br />
+          {{ form.amount.label }}
+          {{ form.amount(class_="form-control") }}
+          <br />
+          {{ form.reason.label }}
+          {{ form.reason(class_="form-control") }}
+          <br />
+          {{ form.category.label }}
+          {{ form.category(class_="form-control") }}
+          <br />
+          {{form.submit(class_="btn btn-primary")}}
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-12 col-sm-12">
       <div class="jumbotron">
         <h1 class="text-center">All-Time Stats</h1>
         <table class="table">
@@ -44,20 +73,24 @@
         </table>
         <hr>
       </div>
-    </div>
-    <div class="col-lg-6 col-md-12 col-sm-12">
       <div class="jumbotron">
-        <h1>Give</h1>
-        <form method=post>
-          {{ form.hidden_tag() }}
-          {{ form.recipient.label }}
-          {{ form.recipient() }}
-          <br />
-          {{ form.amount.label }}
-          {{ form.amount() }}
-          <br />
-          {{form.submit()}}
-        </form>
+        <h1 class="text-center">Transaction History</h1>
+        <hr />
+        {% for transaction in userTransactions %}
+          <li class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">
+                <img height="20px" width="20px" src={{transaction.giver.image}} />
+                {{transaction.giver.name}} gave
+                <img height="20px" width="20px" src={{transaction.recipient.image}} />
+                {{transaction.recipient.name}}
+              </h5>
+              <small><div class="btn btn-medal">{{transaction.amount}}</div></small>
+            </div>
+            <p class="mb-1">Reason: {{transaction.reason}}</p>
+            <small>Category: {{transaction.category}}</small>
+          </li>
+        {% endfor %}
       </div>
     </div>
   </div>
