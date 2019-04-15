@@ -2,8 +2,7 @@
 ## OT Currency
 
 ### README
-    For the project's full readme that includes user testing and roadmap
-    https://docs.google.com/document/d/17Vo0qMBIvlCqCMY3JUL0ZudS-CiAsRX4fwtiIGVu7y0/edit?usp=sharing
+    Find the project's full readme that includes user testing and roadmap [here](https://docs.google.com/document/d/17Vo0qMBIvlCqCMY3JUL0ZudS-CiAsRX4fwtiIGVu7y0/edit?usp=sharing).
 
 ### About
     OT Currency is a project made for Oakland Tech's 2019 Capstone class
